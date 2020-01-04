@@ -1,7 +1,6 @@
 #!/usr/bin/python2
 
 from keystone import *
-from sys import argv
 import binascii
 from shutil import copyfileobj
 import argparse
