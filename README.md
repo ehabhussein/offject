@@ -35,4 +35,16 @@ rd@Wakanda $ hexdump -C bar.txt
 
 ---------------------------------------------
 
+file: projcreate.py
+"""creates a template directory for pentests"""
+usage:
+rd@Wakanda $ projcreate test                                 
+project created!
+rd@Wakanda $ cd test-4-1-2020                                
+rd@Wakanda $ ls                                   
+burpsaves    credentials  exploits  images   reports    scope       todo
+code-review  docs         finds     network  reversing  scratchpad  web
+
+
+
 </pre>
