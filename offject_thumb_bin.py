@@ -17,7 +17,6 @@ if __name__ == '__main__':
         copyfileobj(target, outfile)
     except:
         pass
-    stop = ""
     opcodes = []
     opcs = None
     while True:
@@ -39,7 +38,6 @@ if __name__ == '__main__':
                     opcodes.append("%02x" % i)
                 print ''.join(opcodes)
                 opcs = binascii.unhexlify(''.join(opcodes))
-                print opcs
             except Exception as e:
                 print(e)
     print "Done!"
