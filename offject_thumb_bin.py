@@ -15,7 +15,6 @@ if __name__ == '__main__':
     target = open(getargs.infile,'rb')
     outfile = open(getargs.outfile,'w+b')
     copyfileobj(target, outfile)
-    stop = ""
     opcodes = []
     opcs = None
     while True:
@@ -37,7 +36,6 @@ if __name__ == '__main__':
                     opcodes.append("%02x" % i)
                 print ''.join(opcodes)
                 opcs = binascii.unhexlify(''.join(opcodes))
-                print opcs
             except Exception as e:
                 print(e)
     print "Done!"
