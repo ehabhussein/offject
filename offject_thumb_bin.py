@@ -1,22 +1,21 @@
 #!/usr/bin/python2
-"""injects Thumb instructions at a specific location in a binary"""
 
 from keystone import *
 from sys import argv
 import binascii
 from shutil import copyfileobj
+import argparse
 
 
 if __name__ == '__main__':
-    try:
-        target = open(argv[1],'rb')
-    except:
-        pass
-    try:
-        outfile = open(argv[2],'w+b')
-        copyfileobj(target, outfile)
-    except:
-        pass
+    getopts = argparse.ArgumentParser()
+    getopts.add_argument("-i",help="input file name",dest="infile",required=True)
+    getopts.add_argument("-o",help="output file name",dest="outfile",required=True)
+    getargs = getopts.parse_args()
+    target = open(getargs.infile,'rb')
+    outfile = open(getargs.outfile,'w+b')
+    copyfileobj(target, outfile)
+    stop = ""
     opcodes = []
     opcs = None
     while True:
@@ -38,6 +37,7 @@ if __name__ == '__main__':
                     opcodes.append("%02x" % i)
                 print ''.join(opcodes)
                 opcs = binascii.unhexlify(''.join(opcodes))
+                print opcs
             except Exception as e:
                 print(e)
     print "Done!"
