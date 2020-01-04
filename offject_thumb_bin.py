@@ -23,7 +23,7 @@ if __name__ == '__main__':
         elif len(x) == 0:
             continue
         elif x.lower() == 'write':
-            offset = input("Enter offset: 0xabc >")
+            offset = input("Enter offset: [0xabc]> ")
             outfile.seek(0)
             outfile.seek(offset)
             outfile.write(opcs)
