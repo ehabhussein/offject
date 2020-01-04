@@ -31,7 +31,7 @@ if __name__ == '__main__':
             break
         else:
             try:
-                for i in (Ks(KS_ARCH_ARM, KS_MODE_THUMB).asm(x, 0x00000000))[0]:
+                for i in (Ks(KS_ARCH_ARM, KS_MODE_THUMB).asm(x))[0]:
                     opcodes.append("%02x" % i)
                 print ''.join(opcodes)
                 opcs = binascii.unhexlify(''.join(opcodes))
