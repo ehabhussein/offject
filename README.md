@@ -25,7 +25,7 @@ rd@Wakanda $ ./offject.py -i foo.txt -o bar.txt
 offject> mov r1,r1;nop
 094600bf
 offject> write
-Enter offset: 0xabc >0x0
+Enter offset: 0xabc > 0x0
 Done!
 
 rd@Wakanda $ hexdump -C bar.txt 
