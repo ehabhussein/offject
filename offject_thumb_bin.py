@@ -1,5 +1,5 @@
 #!/usr/bin/python2
-
+"""Injects Thumb instructions at a specified location in a binary (corterx-M0)"""
 from keystone import *
 import binascii
 from shutil import copyfileobj
