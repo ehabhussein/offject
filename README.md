@@ -13,7 +13,7 @@ offject> mov r1,r1
 offject> nop
 094600bf
 offject> write
-Enter offset: 0xabc >0x10
+Enter offset: [0xabc]> 0x10
 Done!
 
 rd@Wakanda $ hexdump -C bar.txt 
