@@ -2,6 +2,7 @@
 
 $ git clone https://github.com/keystone-engine
 Install keystone and compile it using: https://github.com/keystone-engine/keystone/blob/master/docs/COMPILE-NIX.md
+if it doesnt compile just apt-get install libssl-dev then recompile
 
 
 
