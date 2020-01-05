@@ -33,18 +33,4 @@ rd@Wakanda $ hexdump -C bar.txt
 00000010  42 49 4e 41 52 59 20 3a  29 0a                    |BINARY :).|
 0000001a
 
----------------------------------------------
-
-file: projcreate.py
-"""creates a template directory for pentests"""
-usage:
-rd@Wakanda $ projcreate test                                 
-project created!
-rd@Wakanda $ cd test-4-1-2020                                
-rd@Wakanda $ ls                                   
-burpsaves    credentials  exploits  images   reports    scope       todo
-code-review  docs         finds     network  reversing  scratchpad  web
-
-
-
 </pre>
