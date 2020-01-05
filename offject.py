@@ -22,6 +22,9 @@ if __name__ == '__main__':
             break
         elif len(x) == 0:
             continue
+        elif x.lower() == 'clear':
+            opcodes = []
+            opcs = []
         elif x.lower() == 'write':
             offset = input("Enter offset: [0xabc]> ")
             outfile.seek(0)
