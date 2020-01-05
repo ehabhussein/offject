@@ -7,7 +7,7 @@ if it doesnt compile just apt-get install libssl-dev then recompile
 
 
 
-file: offject_thumb_bin.py
+file: offject.py
 """injects Thumb instructions at a specific location in a binary"""
 
 Usage:
