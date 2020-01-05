@@ -1,4 +1,10 @@
 <pre>
+
+$ git clone https://github.com/keystone-engine
+Install keystone and compile it using: https://github.com/keystone-engine/keystone/blob/master/docs/COMPILE-NIX.md
+
+
+
 file: offject_thumb_bin.py
 """injects Thumb instructions at a specific location in a binary"""
 
