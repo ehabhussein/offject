@@ -184,19 +184,8 @@ class REPL:
         Returns:
             Prompt string
         """
-        if self._simple_mode:
-            return "offject> "
-
-        # Rich prompt with colors
-        parts = []
-        if self._patcher.modified:
-            parts.append("\033[91m*\033[0m")  # Red asterisk
-        parts.append(f"\033[96moffject\033[0m")  # Cyan "offject"
-        parts.append(f"[\033[93m{self._arch.name}\033[0m]")  # Yellow arch
-        parts.append(f"[\033[92m0x{self._offset:X}\033[0m]")  # Green offset
-        parts.append("> ")
-
-        return "".join(parts)
+        modified = "*" if self._patcher.modified else ""
+        return f"{modified}offject [{self._arch.name}] 0x{self._offset:X} » "
 
     def _process_line(self, line: str) -> None:
         """Process a command line.
