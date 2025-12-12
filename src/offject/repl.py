@@ -276,13 +276,29 @@ class REPL:
                 self._console.print(f"Buffer: {hex_str} ({len(self._assembled_bytes)} bytes)")
             else:
                 self._console.print_info("No assembled bytes in buffer")
-                self._console.print_info("Usage: asm <instruction(s)>")
+                self._console.print_info("Usage: asm [offset] <instruction(s)>")
             return
 
-        code = " ".join(args)
+        offset = self._offset
+        code_args = args
+
+        # Check if first argument is an offset (hex or decimal number)
+        if args[0].startswith("0x") or args[0].startswith("0X") or args[0].isdigit():
+            try:
+                offset = parse_int(args[0])
+                self._offset = offset
+                code_args = args[1:]
+            except ValueError:
+                pass  # Not a valid number, treat as code
+
+        if not code_args:
+            self._console.print_error("No assembly code provided")
+            return
+
+        code = " ".join(code_args)
 
         try:
-            result = self._assembler.assemble(code, self._offset)
+            result = self._assembler.assemble(code, offset)
             self._assembled_bytes = result.data
             self._console.print_assembly_result(result.hex_spaced, result.count, len(result.data))
         except AssemblerError as e:
@@ -299,19 +315,29 @@ class REPL:
             self._console.print_error("No file is open")
             return
 
+        offset = self._offset
         count = 10
-        if args:
+
+        if len(args) >= 1:
             try:
-                count = parse_int(args[0])
+                offset = parse_int(args[0])
+                self._offset = offset
             except ValueError:
-                self._console.print_error(f"Invalid count: {args[0]}")
+                self._console.print_error(f"Invalid offset: {args[0]}")
                 return
 
-        # Read bytes at current offset
+        if len(args) >= 2:
+            try:
+                count = parse_int(args[1])
+            except ValueError:
+                self._console.print_error(f"Invalid count: {args[1]}")
+                return
+
+        # Read bytes at offset
         try:
             # Read more bytes than needed (instructions vary in size)
-            data = self._patcher.read(self._offset, count * 16)
-            instructions = self._disassembler.disassemble(data, self._offset, count)
+            data = self._patcher.read(offset, count * 16)
+            instructions = self._disassembler.disassemble(data, offset, count)
             self._console.print_disassembly(instructions)
         except PatcherError as e:
             self._console.print_error(str(e))
@@ -379,11 +405,11 @@ class REPL:
         """Get detailed help for a command."""
         help_texts = {
             "arch": "arch [name]\n  Show or set architecture\n  Examples: arch arm_thumb, arch x64",
-            "asm": "asm <instruction(s)>\n  Assemble instructions\n  Separate multiple with ; or newlines\n  Example: asm mov eax, 0; ret",
-            "disasm": "disasm [count]\n  Disassemble instructions at current offset\n  Default count: 10",
+            "asm": "asm [offset] <instruction(s)>\n  Assemble instructions at offset (default: current)\n  Also sets current offset. Separate multiple with ;\n  Example: asm 0x1000 mov eax, 0; ret",
+            "disasm": "disasm [offset] [count]\n  Disassemble instructions at offset (default: current)\n  Also sets current offset. Default count: 10",
             "goto": "goto <offset|symbol>\n  Jump to offset or symbol\n  Examples: goto 0x1000, goto main",
-            "hex": "hex [size]\n  Show hex dump at current offset\n  Default size: 256 bytes",
-            "patch": "patch\n  Write assembled bytes at current offset\n  Must have bytes in buffer (use 'asm' first)",
+            "hex": "hex [offset] [size]\n  Show hex dump at offset (default: current)\n  Also sets current offset. Default size: 256 bytes",
+            "patch": "patch [offset]\n  Write assembled bytes at offset (default: current)\n  Also sets current offset. Must have bytes in buffer (use 'asm' first)",
             "script": "script load <file>  - Load and execute patch script\nscript save <file>  - Save patch history as script",
             "save": "save [file]\n  Save patched file\n  Without argument, saves to original file",
             "undo": "undo\n  Undo last patch",
@@ -397,17 +423,27 @@ class REPL:
             self._console.print_error("No file is open")
             return
 
+        offset = self._offset
         size = 256
-        if args:
+
+        if len(args) >= 1:
             try:
-                size = parse_int(args[0])
+                offset = parse_int(args[0])
+                self._offset = offset
             except ValueError:
-                self._console.print_error(f"Invalid size: {args[0]}")
+                self._console.print_error(f"Invalid offset: {args[0]}")
+                return
+
+        if len(args) >= 2:
+            try:
+                size = parse_int(args[1])
+            except ValueError:
+                self._console.print_error(f"Invalid size: {args[1]}")
                 return
 
         try:
-            data = self._patcher.read(self._offset, size)
-            self._hexview.print(data, self._offset)
+            data = self._patcher.read(offset, size)
+            self._hexview.print(data, offset)
         except PatcherError as e:
             self._console.print_error(str(e))
 
@@ -447,8 +483,17 @@ class REPL:
             self._console.print_info("Use 'asm <code>' first to assemble instructions")
             return
 
+        offset = self._offset
+        if args:
+            try:
+                offset = parse_int(args[0])
+                self._offset = offset
+            except ValueError:
+                self._console.print_error(f"Invalid offset: {args[0]}")
+                return
+
         try:
-            patch = self._patcher.patch(self._offset, self._assembled_bytes)
+            patch = self._patcher.patch(offset, self._assembled_bytes)
             self._console.print_patch_result(patch)
             self._assembled_bytes = None  # Clear buffer after patching
         except PatcherError as e:
